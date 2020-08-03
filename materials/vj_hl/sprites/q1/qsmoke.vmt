@@ -1,0 +1,7 @@
+"UnlitGeneric"
+{
+	"$baseTexture" "vj_hl/sprites/q1/qsmoke"
+	"$additive" "1"
+	"$vertexcolors" "1"
+	"$vertexalpha" "1"
+}

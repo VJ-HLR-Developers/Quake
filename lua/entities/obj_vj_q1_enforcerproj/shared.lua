@@ -1,0 +1,8 @@
+ENT.Base 			= "obj_vj_projectile_base"
+ENT.Type 			= "anim"
+ENT.PrintName 		= "Q1 Enforcer Projectile"
+ENT.Author 			= "oteek"
+ENT.Contact 		= "http://steamcommunity.com/groups/mawwork"
+ENT.Purpose 		= "Boom!"
+ENT.Instructions 	= "no"
+ENT.Category		= "Quake 1"

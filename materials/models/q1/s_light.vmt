@@ -1,0 +1,5 @@
+"unlitgeneric"
+{
+	"$basetexture" "models/q1/s_light"
+	"$selfillum" "1"
+}

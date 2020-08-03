@@ -1,0 +1,10 @@
+ENT.Type = "anim"
+ENT.PrintName = "Backpack"
+ENT.Category = "Quake 1 Ammo"
+ENT.Author = "oteek"
+ENT.Contact = ""
+ENT.Purpose = ""
+ENT.Instructions = ""
+ENT.Spawnable = false
+ENT.AdminOnly = false
+ENT.AdminSpawnable = false

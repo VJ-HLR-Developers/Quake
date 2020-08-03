@@ -1,0 +1,5 @@
+"unlitgeneric"
+{
+	"$basetexture" "models/q1/laser"
+	$selfillum 1
+}

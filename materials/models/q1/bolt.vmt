@@ -1,0 +1,5 @@
+"unlitgeneric"
+{
+	"$basetexture" "models/q1/bolt"
+	$selfillum 1
+}
