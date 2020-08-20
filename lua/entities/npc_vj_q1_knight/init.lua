@@ -64,7 +64,7 @@ function ENT:SetUpGibesOnDeath(dmginfo,hitgroup)
 end
 ---------------------------------------------------------------------------------------------------------------------------------------------
 function ENT:CustomGibOnDeathSounds(dmginfo,hitgroup)
-	VJ_EmitSound(self,"q1/player/udeath.wav",90,math.random(100,100))
+	VJ_EmitSound(self,"q1/player/udeath.wav", 90, math.random(100,100))
 	return false
 end
 ---------------------------------------------------------------------------------------------------------------------------------------------
