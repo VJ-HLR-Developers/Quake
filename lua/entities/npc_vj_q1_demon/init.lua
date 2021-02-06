@@ -31,8 +31,8 @@ ENT.LeapAttackDamage = 40
 ENT.LeapAttackVelocityForward = 400
 ENT.LeapAttackVelocityUp = 250
 ENT.HasLeapAttack = true
-ENT.LeapToMeleeDistance = 100
-ENT.LeapAttackDamageDistance = 150
+ENT.LeapToMeleeDistance = 130
+ENT.LeapAttackDamageDistance = 130
 ENT.TimeUntilLeapAttackDamage = 0.5
 ENT.TimeUntilMeleeAttackDamage = false
 -- Melee --

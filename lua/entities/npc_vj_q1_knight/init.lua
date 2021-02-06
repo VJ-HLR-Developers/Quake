@@ -11,7 +11,7 @@ ENT.StartHealth = 75
 
 ENT.HasDeathAnimation = true
 ENT.AnimTbl_Death = {ACT_DIESIMPLE}
-ENT.DeathAnimationTime = 0.8
+--ENT.DeathAnimationTime = 0.8
 ENT.CustomBlood_Particle = {"vj_hl_blood_red"}
 ENT.CustomBlood_Decal = {"VJ_HLR_Blood_Red"}
 ENT.GibOnDeathDamagesTable = {"All"}

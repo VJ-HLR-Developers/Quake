@@ -21,7 +21,9 @@ function ENT:CustomOnInitialize()
 end
 ---------------------------------------------------------------------------------------------------------------------------------------------
 function ENT:CustomOnThink()
-	self.Weapon_ShotsSinceLastReload = 0
+	if IsValid(self:GetActiveWeapon()) then
+		self:GetActiveWeapon():SetClip1(9999)
+	end
 end
 /*-----------------------------------------------
 	*** Copyright (c) 2012-2015 by DrVrej, All rights reserved. ***
