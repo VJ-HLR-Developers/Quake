@@ -56,11 +56,12 @@ ENT.SoundTbl_BeforeRangeAttack = { "q1/shambler/sattck1.wav" }
 ENT.SoundTbl_Pain = { "q1/shambler/shurt2.wav" }
 ENT.SoundTbl_Death = { "q1/shambler/sdeath.wav" }
 ----------------------------------------------------------
+ENT.HullType = HULL_LARGE
 ENT.HasExtraMeleeAttackSounds = true
 --------------------------------------------------------
 ---------------------------------------------------------------------------------------------------------------------------------------------
 function ENT:CustomOnInitialize()
-	self:SetCollisionBounds(Vector(40,40,120), Vector(-5,-40,0))
+	self:SetCollisionBounds(Vector(60,60,124), Vector(-60,-60,0))
 end
 ---------------------------------------------------------------------------------------------------------------------------------------------
 function ENT:MultipleMeleeAttacks()	
