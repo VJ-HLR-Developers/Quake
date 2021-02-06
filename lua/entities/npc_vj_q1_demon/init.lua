@@ -73,7 +73,7 @@ function ENT:CustomOnAcceptInput(key,activator,caller,data)
 end
 ---------------------------------------------------------------------------------------------------------------------------------------------
 function ENT:SetUpGibesOnDeath(dmginfo,hitgroup)
-	if self:Health() <= -80 then
+	if self:Health() <= -60 then
 		self.HasDeathSounds = false
 			if self.HasGibDeathParticles == true then
 				local bloodeffect = EffectData()
