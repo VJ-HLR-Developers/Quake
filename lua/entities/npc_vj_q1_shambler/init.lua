@@ -10,15 +10,23 @@ ENT.Model = "models/quake1/shambler.mdl"
 ENT.BloodColor = "Red"
 ENT.CustomBlood_Particle = {"vj_hl_blood_red"}
 ENT.CustomBlood_Decal = {"VJ_HLR_Blood_Red"} -- Decals to spawn when it's damaged
+ENT.VJC_Data = {
+    ThirdP_Offset = Vector(-50, 0, -45), -- The offset for the controller when the camera is in third person
+    FirstP_Bone = "Shamhead", -- If left empty, the base will attempt to calculate a position for first person
+    FirstP_Offset = Vector(10, 0, 0), -- The offset for the controller when the camera is in first person
+}
 ENT.HasDeathRagdoll = true
 ENT.RangeDistance = 2000
-ENT.RangeToMeleeDistance = 500 
+ENT.RangeToMeleeDistance = 500
 --ENT.StartHealth = GetConVarNumber("vj_q1_shambler_health")
 ENT.StartHealth = 600
 ENT.BloodColor = "Red"
 ENT.CustomBlood_Particle = {"vj_hl_blood_red"}
 ENT.CustomBlood_Decal = {"VJ_HLR_Blood_Red"} -- Decals to spawn when it's damaged
 ENT.HasBloodPool = false
+ENT.HasWorldShakeOnMove = true -- Should the world shake when it's moving?
+ENT.MeleeAttackWorldShakeOnMissAmplitude = 1
+ENT.MeleeAttackWorldShakeOnMissRadius = 200
 ----------------------------------------------------------
 ENT.MeleeAttackDamage = 80
 -- Flinching --
@@ -45,7 +53,11 @@ ENT.NextRangeAttackTime = 1
 ENT.DisableDefaultRangeAttackCode = true -- When true, it won't spawn the range attack entity, allowing you to make your own
 ENT.TimeUntilRangeAttackProjectileRelease = 0.5
 ----------------------------------------------------------
+ENT.DisableFootStepSoundTimer = true
+----------------------------------------------------------
+ENT.SoundTbl_FootStep = {"vj_hlr/hl1_npc/garg/gar_step1.wav","vj_hlr/hl1_npc/garg/gar_step2.wav"}
 ENT.SoundTbl_Alert = { "q1/shambler/ssight.wav" }
+ENT.SoundTbl_BeforeMeleeAttack = {"q1/shambler/melee1.wav","q1/shambler/melee2.wav"}
 ENT.SoundTbl_MeleeAttack = { "q1/shambler/melee1.wav", "q1/shambler/melee2.wav" }
 ENT.SoundTbl_MeleeAttackMiss = { "npc/zombie/claw_miss1.wav", "npc/zombie/claw_miss2.wav" }
 ENT.SoundTbl_Idle = { "q1/shambler/sidle.wav" }
@@ -64,12 +76,19 @@ function ENT:CustomOnInitialize()
 	self:SetCollisionBounds(Vector(60,60,124), Vector(-60,-60,0))
 end
 ---------------------------------------------------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------------------------------------------------
+function ENT:CustomOnAcceptInput(key, activator, caller, data)
+	//print(key)
+	if key == "step" then
+		self:FootStepSoundCode()
+	end
+end
 function ENT:MultipleMeleeAttacks()	
 	local randattack = math.random(1,2)
         if randattack == 1 then
 		self.AnimTbl_MeleeAttack = {"vjseq_swing"}
 		self.NextAnyAttackTime_Melee = 0.72
-		self.MeleeAttackDistance = 100
+		self.MeleeAttackDistance = 50
 		self.MeleeAttackExtraTimers = {}
 		--self.MeleeAttackDamage = GetConVarNumber("vj_q1_shambler_claw")
 		self.MeleeAttackDamageDistance = 120
@@ -78,16 +97,36 @@ function ENT:MultipleMeleeAttacks()
         elseif randattack == 2 then
 		self.AnimTbl_MeleeAttack = {"vjseq_smash"}
 		self.NextAnyAttackTime_Melee = 0.72
-		self.MeleeAttackDistance = 80
+		self.MeleeAttackDistance = 50
 		self.MeleeAttackExtraTimers = {}
-		self.MeleeAttackDamageDistance = 100
+		self.MeleeAttackDamageDistance = 140
 		--self.MeleeAttackDamage = GetConVarNumber("vj_q1_shambler_smash")
 		self.MeleeAttackDamage = 120
 	end
-end		
+end
 ---------------------------------------------------------------------------------------------------------------------------------------------
-function ENT:PitWorm_DoLaserEffects()
-	local startpos = self:GetPos() + self:GetUp()*250 + self:GetForward()*230
+function ENT:SH_DoElecEffect(sp,hp,a,t)
+	local elec = EffectData()
+	elec:SetStart(sp)
+	elec:SetOrigin(hp)
+	elec:SetEntity(self)
+	elec:SetAttachment(a)
+	elec:SetScale(t)
+	util.Effect("VJ_Q1_Electric_Charge",elec)
+end
+---------------------------------------------------------------------------------------------------------------------------------------------
+function ENT:CustomOnRangeAttack_AfterStartTimer()
+	local randt = 0.5
+	local tr = util.TraceLine({
+		start = self:GetAttachment(self:LookupAttachment("1")).Pos,
+		endpos = self:GetAttachment(self:LookupAttachment("2")).Pos,
+		filter = self
+	})
+	self:SH_DoElecEffect(tr.StartPos, tr.HitPos, 2, randt)
+end
+---------------------------------------------------------------------------------------------------------------------------------------------
+function ENT:Shambler_DoLaserEffects()
+	local startpos = self:GetPos() + self:GetUp()*2 + self:GetForward()*2
 	local tr = util.TraceLine({
 		start = startpos,
 		endpos = self:GetEnemy():GetPos() + self:GetEnemy():OBBCenter(),
@@ -103,7 +142,7 @@ function ENT:PitWorm_DoLaserEffects()
 end
 ---------------------------------------------------------------------------------------------------------------------------------------------
 function ENT:CustomRangeAttackCode()
-	self:PitWorm_DoLaserEffects()
+	self:Shambler_DoLaserEffects()
 	
 	local StartGlow1 = ents.Create("env_sprite")
 	StartGlow1:SetKeyValue("model","vj_hl/sprites/flare3.vmt")
@@ -125,15 +164,20 @@ function ENT:CustomRangeAttackCode()
 	StartGlow1:Fire("SetParentAttachment", "0")
 	self:DeleteOnRemove(StartGlow1)
 	timer.Simple(0.65, function() if IsValid(self) && IsValid(StartGlow1) then StartGlow1:Remove() end end)
-	
-	for i = 0.1, 0.1, 0.1 do
+	sound.Play("q1/shambler/sboom.wav", self:Shambler_DoLaserEffects(), 80)
+	for i = 0.1, 0.35, 0.1 do
 		timer.Simple(i,function()
 			if IsValid(self) && IsValid(self:GetEnemy()) && self.RangeAttacking == true then
-				local hitpos = self:PitWorm_DoLaserEffects()
+				local hitpos = self:Shambler_DoLaserEffects()
 				util.VJ_SphereDamage(self,self,hitpos,1,10,DMG_SHOCK,true,false,{Force=90})
-				sound.Play("q1/shambler/sboom.wav", hitpos, 80)
 			end
 		end)
+	end
+end
+---------------------------------------------------------------------------------------------------------------------------------------------
+function ENT:CustomOnTakeDamage_BeforeDamage(dmginfo, hitgroup)
+	if dmginfo:IsExplosionDamage() == true then
+			dmginfo:SetDamage(dmginfo:GetDamage() / 2)
 	end
 end
 ---------------------------------------------------------------------------------------------------------------------------------------------
