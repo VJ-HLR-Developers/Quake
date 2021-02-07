@@ -90,6 +90,7 @@ function ENT:MultipleMeleeAttacks()
 		self.NextAnyAttackTime_Melee = 0.72
 		self.MeleeAttackDistance = 50
 		self.MeleeAttackExtraTimers = {}
+		self.MeleeAttackDamageType = DMG_SLASH
 		--self.MeleeAttackDamage = GetConVarNumber("vj_q1_shambler_claw")
 		self.MeleeAttackDamageDistance = 120
 		self.MeleeAttackDamage = 80
@@ -99,6 +100,7 @@ function ENT:MultipleMeleeAttacks()
 		self.NextAnyAttackTime_Melee = 0.72
 		self.MeleeAttackDistance = 50
 		self.MeleeAttackExtraTimers = {}
+		self.MeleeAttackDamageType = DMG_CRUSH
 		self.MeleeAttackDamageDistance = 140
 		--self.MeleeAttackDamage = GetConVarNumber("vj_q1_shambler_smash")
 		self.MeleeAttackDamage = 120
@@ -226,7 +228,7 @@ function ENT:CustomOnDoKilledEnemy(argent,attacker,inflictor)
 	if IsValid(argent) then
 		local name = argent:GetName()
 		PrintMessage( HUD_PRINTCONSOLE, " " )
-		PrintMessage( HUD_PRINTCONSOLE, "'"..name.."' was eviscerated by a Fiend" )
+		PrintMessage( HUD_PRINTCONSOLE, "'"..name.."' was smashed by a Shambler" )
 	end
 end
 /*-----------------------------------------------
