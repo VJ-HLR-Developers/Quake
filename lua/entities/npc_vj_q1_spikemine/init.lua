@@ -18,7 +18,7 @@ ENT.MeleeAttackDistance = 1
 ENT.SoundTbl_Breath = {"q1/spikemine/spikmine.wav"}
 ENT.CallForHelp = false
 ENT.HasBreathSound = true
-ENT.BreathSoundLevel = 65
+ENT.BreathSoundLevel = 70
 ENT.DisableWandering = true
 ---------------------------------------------------------------------------------------------------------------------------------------------
 function ENT:CustomOnInitialize()
