@@ -23,7 +23,7 @@ ENT.FlinchChance = 2
 -- Death --
 ENT.GibOnDeathDamagesTable = {"All"}
 ENT.HasDeathAnimation = true
-ENT.DeathAnimationTime = 0.5
+--ENT.DeathAnimationTime = 0.5
 ENT.AnimTbl_Death = {ACT_DIESIMPLE}
 -- Leaping --
 ENT.NextLeapAttackTime = 0
